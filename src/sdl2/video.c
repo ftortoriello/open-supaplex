@@ -232,7 +232,7 @@ void toggleFullscreen()
 
 void setFullscreenMode(uint8_t fullscreen)
 {
-    SDL_SetWindowFullscreen(gWindow, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+    SDL_SetWindowFullscreen(gWindow, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 }
 
 uint8_t getFullscreenMode(void)
