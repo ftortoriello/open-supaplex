@@ -136,9 +136,6 @@ void parseCommandLineOptions(int argc, char *argv[])
     {
         switch (opt)
         {
-            case 'h':
-                handlePrintHelpOption();
-                break;
             case 'z':
                 handleForceLevelSetOption();
                 break;
@@ -188,6 +185,10 @@ void parseCommandLineOptions(int argc, char *argv[])
             case 'u':
                 handlePlayDemoFile(FastModeTypeUltra);
                 break;
+            //case 'h':
+            default:
+                handlePrintHelpOption();
+                return;
         }
     }
 
