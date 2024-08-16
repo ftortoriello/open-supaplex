@@ -168,10 +168,10 @@ void destroyAudio()
         return;
     }
 
-    stopMusic();
-    // TODO: stop sounds
-    Mix_Quit();
+    destroyMusic();
+    destroySounds();
     Mix_CloseAudio();
+    Mix_Quit();
 }
 
 void loadMusic()
@@ -256,8 +256,8 @@ void destroySounds()
         if (gSoundEffectChunks[i] != NULL)
         {
             Mix_FreeChunk(gSoundEffectChunks[i]);
+            gSoundEffectChunks[i] = NULL;
         }
-        gSoundEffectChunks[i] = NULL;
     }
 }
 
@@ -344,14 +344,11 @@ void stopMusic()
 
 void destroyMusic()
 {
-    stopMusic();
-
     if (gMusic != NULL)
     {
         Mix_FreeMusic(gMusic);
+        gMusic = NULL;
     }
-
-    gMusic = NULL;
 }
 
 void playSoundEffect(SoundEffect soundEffect)
