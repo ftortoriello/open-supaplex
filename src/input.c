@@ -17,6 +17,7 @@
 
 #include "input.h"
 
+#include "commandLineParser.h"
 #include "controller.h"
 #include "keyboard.h"
 
@@ -70,7 +71,8 @@ uint8_t isMenuCancelButtonPressed(void)
 
 uint8_t isExitLevelButtonPressed(void)
 {
-    return getGameControllerButtonBack();
+    return (getGameControllerButtonBack()
+            || (gDisableAdvancedMenu && gIsEscapeKeyPressed));
 }
 
 uint8_t isStartButtonPressed(void)
@@ -81,7 +83,7 @@ uint8_t isStartButtonPressed(void)
 uint8_t isPauseButtonPressed(void)
 {
     return (gIsPKeyPressed
-            || gIsEscapeKeyPressed
+            || (!gDisableAdvancedMenu && gIsEscapeKeyPressed)
             || getGameControllerButtonStart());
 }
 

@@ -5252,6 +5252,39 @@ void loc_49C2C(char text[3]) // :              ; CODE XREF: handleGameUserInput+
     loc_49C41();
 }
 
+void handleGamePause()
+{
+    fadeToPalette(gGameDimmedPalette);
+
+    do
+    {
+//loc_49CA8:              ; CODE XREF: handleGameUserInput+752^Yj
+        int9handler(1);
+    }
+    while (isPauseButtonPressed());
+
+    do
+    {
+//loc_49CAF:              ; CODE XREF: handleGameUserInput+759^Yj
+        int9handler(1);
+
+        if (gShouldExitGame != 0)
+        {
+            return;
+        }
+    }
+    while (!isPauseButtonPressed());
+
+    do
+    {
+//loc_49CB6:              ; CODE XREF: handleGameUserInput+760^Yj
+        int9handler(1);
+    }
+    while (isPauseButtonPressed());
+
+    fadeToPalette(gGamePalette);
+}
+
 void loc_49C41() //              ; CODE XREF: handleGameUserInput+404j
 //                    ; handleGameUserInput+52Bj
 {
@@ -5277,7 +5310,14 @@ void loc_49C41() //              ; CODE XREF: handleGameUserInput+404j
     {
         // 01ED:303A
         gIsGameRunning = 0;
-        runAdvancedOptionsRootMenu();
+        if (gDisableAdvancedMenu)
+        {
+            handleGamePause();
+        }
+        else
+        {
+            runAdvancedOptionsRootMenu();
+        }
         gIsGameRunning = 1;
     }
 
@@ -8874,7 +8914,15 @@ void runMainMenu() // proc near       ; CODE XREF: start+43Ap
         else if (getGameControllerButtonBack() // Select/Back/- controller button -> exit game
                  || gIsEscapeKeyPressed == 1)
         {
-            runAdvancedOptionsRootMenu();
+            if (gDisableAdvancedMenu)
+            {
+                gShouldExitGame = 1;
+                break;
+            }
+            else
+            {
+                runAdvancedOptionsRootMenu();
+            }
         }
         else if (isRotateLevelSetAscendingButtonPressed())
         {

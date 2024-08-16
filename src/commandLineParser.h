@@ -48,6 +48,8 @@ extern uint8_t gShouldAlwaysWriteSavegameSav; // 'W' command line option -> Forc
 //extern uint8_t byte_59B78; // 'Y' command line option
 //extern uint8_t byte_59B79; // 'Z' command line option
 
+extern uint8_t gDisableAdvancedMenu; // '-m' command line option
+
 #define kInvalidForcedInitialGameSpeed 0xFF
 extern uint8_t gForcedInitialGameSpeed;
 
