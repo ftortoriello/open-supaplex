@@ -54,6 +54,8 @@ uint8_t gShouldAlwaysWriteSavegameSav = 0; // dword_59B76 -> 'W' command line op
 //uint8_t byte_59B78 = 0; // 'Y' command line option
 //uint8_t byte_59B79 = 0; // 'Z' command line option
 
+uint8_t gDisableAdvancedMenu = 0; // '-m' command line option
+
 uint8_t gForcedInitialGameSpeed = kInvalidForcedInitialGameSpeed;
 
 uint8_t gIsSPDemoAvailableToRun = 0;
@@ -67,7 +69,7 @@ typedef struct {
     const char *description;
 } OpenSupaplexCommandLineOption;
 
-#define kNumberOfCommandLineOptions 17
+#define kNumberOfCommandLineOptions 18
 
 static const OpenSupaplexCommandLineOption kFullCommandLineOptions[kNumberOfCommandLineOptions] = {
     { "help", 'h', 0, "Shows this help" },
@@ -91,6 +93,7 @@ static const OpenSupaplexCommandLineOption kFullCommandLineOptions[kNumberOfComm
     { "play-sp-file", 'p', 1, "Use SP-file to play at start and from menu with F11 and F12" },
     { "quick-demo", 'q', 1, "Lightning speed SP-demo test, exits the game with message" },
     { "ultra-quick-demo", 'u', 1, "Ludicrous speed SP-demo test, exits the game with message" },
+    { "no-menu", 'm', 0, "Disable the new menu shown when pressing the Escape or Pause key" },
 };
 
 static struct option options[kNumberOfCommandLineOptions + 1];
@@ -184,6 +187,9 @@ void parseCommandLineOptions(int argc, char *argv[])
                 break;
             case 'u':
                 handlePlayDemoFile(FastModeTypeUltra);
+                break;
+            case 'm':
+                gDisableAdvancedMenu = 1;
                 break;
             //case 'h':
             default:
