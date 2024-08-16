@@ -55,6 +55,7 @@ uint8_t gShouldAlwaysWriteSavegameSav = 0; // dword_59B76 -> 'W' command line op
 //uint8_t byte_59B79 = 0; // 'Z' command line option
 
 uint8_t gDisableAdvancedMenu = 0; // '-m' command line option
+uint8_t gSavegameCheat = 0;       // '-c' command line option
 
 uint8_t gForcedInitialGameSpeed = kInvalidForcedInitialGameSpeed;
 
@@ -69,7 +70,7 @@ typedef struct {
     const char *description;
 } OpenSupaplexCommandLineOption;
 
-#define kNumberOfCommandLineOptions 18
+#define kNumberOfCommandLineOptions 19
 
 static const OpenSupaplexCommandLineOption kFullCommandLineOptions[kNumberOfCommandLineOptions] = {
     { "help", 'h', 0, "Shows this help" },
@@ -94,6 +95,7 @@ static const OpenSupaplexCommandLineOption kFullCommandLineOptions[kNumberOfComm
     { "quick-demo", 'q', 1, "Lightning speed SP-demo test, exits the game with message" },
     { "ultra-quick-demo", 'u', 1, "Ludicrous speed SP-demo test, exits the game with message" },
     { "no-menu", 'm', 0, "Disable the new menu shown when pressing the Escape or Pause key" },
+    { "cheat", 'c', 0, "Cheat: mark levels as solved when completed after loading a saved game" },
 };
 
 static struct option options[kNumberOfCommandLineOptions + 1];
@@ -190,6 +192,9 @@ void parseCommandLineOptions(int argc, char *argv[])
                 break;
             case 'm':
                 gDisableAdvancedMenu = 1;
+                break;
+            case 'c':
+                gSavegameCheat = 1;
                 break;
             //case 'h':
             default:

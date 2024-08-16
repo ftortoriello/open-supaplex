@@ -5214,7 +5214,10 @@ void loadGameSnapshot() // loc_49A89:              ; CODE XREF: handleGameUserIn
     gLastDrawnMinutesAndSeconds = 0xFFFF;
     gLastDrawnHours = 0xFF;
     drawGameTime();
-    gHasUserCheated = 1;
+    if (!gSavegameCheat)
+    {
+        gHasUserCheated = 1;
+    }
     gIsRecordingDemo = 0;
 
     drawTextWithChars8FontToGamePanel(304, 14, 6, "LD"); // Means snapshot was loaded successfully
