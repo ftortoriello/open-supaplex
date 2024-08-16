@@ -201,15 +201,30 @@ void loadMusic()
     }
 
     char filename[kMaxSoundFilenameLength] = "";
-    snprintf(filename, kMaxSoundFilenameLength, "%s/music-%s.xm", kBaseAudioFolder, musicSuffix);
 
-    gMusic = Mix_LoadMUS(filename);
-
-    if(gMusic == NULL)
+    int tryToLoadMus(const char *extension)
     {
-        spLogInfo("Unable to load music file: %s\n", Mix_GetError());
-        return;
+        snprintf(filename, kMaxSoundFilenameLength, "%s/music-%s.%s",
+                 kBaseAudioFolder, musicSuffix, extension);
+        gMusic = Mix_LoadMUS(filename);
+        return (gMusic != NULL);
     }
+
+    // Try to load the most common audio formats
+
+    if (tryToLoadMus("xm"))
+        return;
+
+    if (tryToLoadMus("flac"))
+        return;
+
+    if (tryToLoadMus("ogg"))
+        return;
+
+    if (tryToLoadMus("wav"))
+        return;
+
+    spLogInfo("Unable to load music file: %s\n", Mix_GetError());
 }
 
 void loadSounds()
@@ -242,10 +257,31 @@ void loadSounds()
 
     char filename[kMaxSoundFilenameLength] = "";
 
+    int tryToLoadWav(int i, const char *extension)
+    {
+        snprintf(filename, kMaxSoundFilenameLength, "%s/%s-%s.%s",
+                 kBaseAudioFolder, gSoundEffectNames[i], effectsSuffix, extension);
+        gSoundEffectChunks[i] = Mix_LoadWAV(filename);
+        return (gSoundEffectChunks[i] != NULL);
+    }
+
     for (int i = 0; i < SoundEffectCount; ++i)
     {
-        snprintf(filename, kMaxSoundFilenameLength, "%s/%s-%s.wav", kBaseAudioFolder, gSoundEffectNames[i], effectsSuffix);
-        gSoundEffectChunks[i] = Mix_LoadWAV(filename);
+        // Try to load the most common audio formats
+
+        if (tryToLoadWav(i, "wav"))
+            continue;
+
+        if (tryToLoadWav(i, "ogg"))
+            continue;
+
+        if (tryToLoadWav(i, "flac"))
+            continue;
+
+        if (tryToLoadWav(i, "xm"))
+            continue;
+
+        spLogInfo("Unable to load sound file: %s\n", Mix_GetError());
     }
 }
 
