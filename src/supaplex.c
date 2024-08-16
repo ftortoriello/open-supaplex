@@ -5384,11 +5384,23 @@ void loc_49C41() //              ; CODE XREF: handleGameUserInput+404j
     }
 
 //loc_49D15:              ; CODE XREF: handleGameUserInput+772j
-    if (isExitLevelButtonPressed() // Select/Back/- controller button -> exit game
-        && gQuitLevelCountdown <= 0)
+    if (gQuitLevelCountdown <= 0)
     {
-        // This is called when I press ESC to exit the game, but not when I die
-        gShouldKillMurphy = 1; // 01ED:30C0
+        // Select/Back/- controller button/Right mouse button -> exit game
+        if (isExitLevelButtonPressed())
+        {
+            // This is called when I press ESC to exit the game, but not when I die
+            gShouldKillMurphy = 1; // 01ED:30C0
+        }
+        else
+        {
+            uint16_t mouseButtonStatus;
+            getMouseStatus(NULL, NULL, &mouseButtonStatus);
+            if (mouseButtonStatus == MouseButtonRight)
+            {
+                gShouldKillMurphy = 1;
+            }
+        }
     }
 
 //loc_49D29:              ; CODE XREF: handleGameUserInput+7BFj
@@ -8906,11 +8918,11 @@ void runMainMenu() // proc near       ; CODE XREF: start+43Ap
         }
 //loc_4C9B0:              // ; CODE XREF: runMainMenu+131j
                    // ; runMainMenu+141j ...
-        // if (gMouseButtonStatus == MouseButtonRight) // Right button -> exit game
-        // {
-        //     gShouldExitGame = 1;
-        //     break;
-        // }
+        if (gMouseButtonStatus == MouseButtonRight) // Right mouse button -> exit game
+        {
+            gShouldExitGame = 1;
+            break;
+        }
         else if (getGameControllerButtonBack() // Select/Back/- controller button -> exit game
                  || gIsEscapeKeyPressed == 1)
         {
