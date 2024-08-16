@@ -4524,7 +4524,7 @@ void stopRecordingDemo() // somethingspsig  proc near       ; CODE XREF: runLeve
                             sigFileSize = idx;
 
 //loc_4941C:              ; CODE XREF: stopRecordingDemo+BCj
-                            fileWriteBytes(signature, sigFileSize, sigFile);
+                            fileWriteBytes(signature, sigFileSize + 1, gCurrentRecordingDemoFile);
                         }
                     }
                 }
