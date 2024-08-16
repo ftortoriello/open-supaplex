@@ -212,7 +212,7 @@ void handlePrintHelpOption(void)
                fullCommandLineOption.name,
                fullCommandLineOption.description);
     }
-    printf("\nWritten by Sergio Padrino (sergiou87)");
+    printf("\nWritten by Sergio Padrino (sergiou87)\n");
 
     exit(0);
 }
