@@ -829,45 +829,39 @@ uint8_t handleAdvancedOptionsMenuInput(AdvancedOptionsMenu *menu)
         playBaseSound();
         moveUpAdvancedOptionsSelectedEntry(menu);
     }
-
-    if (isDownButtonPressed())
+    else if (isDownButtonPressed())
     {
         playBaseSound();
         moveDownAdvancedOptionsSelectedEntry(menu);
     }
-
-    if (isLeftButtonPressed())
+    else if (isLeftButtonPressed())
     {
         playBaseSound();
         decreaseAdvancedOptionsSelectedEntry(menu);
     }
-
-    if (isRightButtonPressed())
+    else if (isRightButtonPressed())
     {
         playBaseSound();
         increaseAdvancedOptionsSelectedEntry(menu);
     }
-
-    if (isMenuConfirmButtonPressed())
+    else if (isMenuConfirmButtonPressed())
     {
         playInfotronSound();
         selectAdvancedOptionsSelectedEntry(menu);
     }
-
-    if (isMenuCancelButtonPressed())
+    else if (isMenuCancelButtonPressed())
     {
         playPushSound();
         return 1;
     }
-
-    if (isPauseButtonPressed())
+    else if (isPauseButtonPressed())
     {
         playPushSound();
         gShouldCloseAdvancedMenu = 1;
         return 1;
     }
 
-    if (gShouldCloseAdvancedMenu)
+    if (gShouldCloseAdvancedMenu || gShouldExitGame)
     {
         return 1;
     }
@@ -888,7 +882,8 @@ void advancedOptionsMenuWaitForKeyPress()
            && isMenuBackButtonPressed() == 0
            && isMenuConfirmButtonPressed() == 0
            && isMenuCancelButtonPressed() == 0
-           && isPauseButtonPressed() == 0);
+           && isPauseButtonPressed() == 0
+           && gShouldExitGame == 0);
 }
 
 void advancedOptionsMenuWaitForKeyRelease()
@@ -1575,6 +1570,11 @@ int main(int argc, char *argv[])
         fadeToPalette(titleDatPalette);
     }
 
+    if (gShouldExitGame != 0)
+    {
+        return 0;
+    }
+
 //isFastMode:              //; CODE XREF: start+2ADj
     loadMurphySprites(); // 01ED:029D
     // Conditions to whether show
@@ -1593,6 +1593,11 @@ int main(int argc, char *argv[])
         drawSpeedFixTitleAndVersion(); // 01ED:02BF
         openCreditsBlock(); // credits inside the block // 01ED:02C2
         drawSpeedFixCredits();   // credits below the block (herman perk and elmer productions) // 01ED:02C5
+    }
+
+    if (gShouldExitGame != 0)
+    {
+        return 0;
     }
 
 //afterOpeningSequence:              //; CODE XREF: start+2DEj
@@ -5318,6 +5323,10 @@ void loc_49C41() //              ; CODE XREF: handleGameUserInput+404j
                 {
                     break;
                 }
+                if (gShouldExitGame != 0)
+                {
+                    return;
+                }
             }
         }
         while (1);
@@ -6816,6 +6825,10 @@ void handleNewPlayerOptionClick() // sub_4AB1B  proc near       ; CODE XREF: run
             videoLoop();
 
             int9handler(0);
+            if (gShouldExitGame != 0)
+            {
+                break;
+            }
             getMouseStatus(&mouseX, &mouseY, &mouseButtonStatus);
             if (mouseButtonStatus != 0)
             {
@@ -6921,6 +6934,11 @@ void handleNewPlayerOptionClick() // sub_4AB1B  proc near       ; CODE XREF: run
         // Limit the player number value to avoid -Wformat-truncation warning
         snprintf(newPlayerName, sizeof(newPlayerName), "PLAYER%2d", MIN((uint8_t)(gNewPlayerEntryIndex + 1), kNumberOfPlayers));
         gNewPlayerNameLength = strlen(newPlayerName);
+    }
+
+    if (gShouldExitGame != 0)
+    {
+        return;
     }
 
     // Completely empty name: ignore
@@ -7036,6 +7054,10 @@ void handleDeletePlayerOptionClick() // sub_4AD0E  proc near
         restoreLastMouseAreaBitmap();
         saveLastMouseAreaBitmap();
         drawMouseCursor();
+        if (gShouldExitGame != 0)
+        {
+            return;
+        }
     }
     while (gMouseButtonStatus == 0);
 
@@ -8984,6 +9006,10 @@ void handleControlsOptionClick() //showControls:                              ; 
                     while (mouseButtonStatus != 0);
                 }
             }
+        }
+        if (gShouldExitGame != 0)
+        {
+            break;
         }
     }
     while (1);
@@ -14572,5 +14598,6 @@ void drawSpeedFixCredits() // showNewCredits  proc near       ; CODE XREF: start
 //loc_50301:             // ; CODE XREF: drawSpeedFixCredits+1Ej
     }
     while (isAnyKeyPressed() == 0
-           && isAnyGameControllerButtonPressed() == 0);
+           && isAnyGameControllerButtonPressed() == 0
+           && gShouldExitGame == 0);
 }
